@@ -8,3 +8,6 @@
  *  6. 提供 gulp build命令
  */
 
+function pug() {
+    // todo
+}
