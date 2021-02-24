@@ -19,8 +19,13 @@ const prettify = require('gulp-prettify') // 美化html
 const stylus = require('gulp-stylus') // 编译stylus
 const autoprefixer = require('gulp-autoprefixer') // 给css自动添加浏览器版本前缀，// v4.0，在根目录添加一个.browserslistrc文件进行gulp-autoprefixer配置
 const base64 = require('gulp-base64') // css图片进行base64转码
+const cache = require('gulp-cache') // 图片压缩可能会占用较长时间，gulp-cache可以减少重复压缩
 const tinypngPlus = require('gulp-tinypng-nokey-plus') //压缩图片
+const filterSize = require('gulp-filter-size') //按大小筛选文件
+const size = require('gulp-size') // 获得文件名称+大小
 const debug = require('gulp-debug') //输出当前gulp管道运行对象
+// const imagemin = require('gulp-imagemin') // 图片压缩
+// const pngquant = require('imagemin-pngquant') // 深度压缩png图片的imagemin插件
 const browserSync = require('browser-sync').create() // browserSync模块,创建Browsersync实例
 const { reload, } = browserSync // 会通知所有的浏览器相关文件被改动，实时更新改动。
 
@@ -54,10 +59,19 @@ const funcImg = () => {
 
     console.log('---------- 开始压缩图片 ----------')
     return src('img/**')
-        .pipe(tinypngPlus())
-        .pipe(debug({ title: '编译:', }))
+    // .pipe(cache(imagemin([imagemin.gifsicle({ interlaced: true, }), imagemin.mozjpeg({
+    //     quality: 75,
+    //     progressive: true,
+    // }), imagemin.optipng({ optimizationLevel: 5, }), imagemin.svgo({ plugins: [{ removeViewBox: true, }, { cleanupIDs: false, }], })])))
+        .pipe(cache(tinypngPlus()))
         .pipe(dest('../img'))
         .pipe(reload({ stream: true, }))
+        .pipe(filterSize({ min: 204800, })) // 单位byte:此处设置200kB
+        .pipe(size({
+            pretty: true,
+            showFiles: true,
+        }))
+        .pipe(debug({ title: '编译:', }))
 
 }
 
