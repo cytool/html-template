@@ -18,6 +18,8 @@ const pug = require('gulp-pug') // 编译pug
 const prettify = require('gulp-prettify') // 美化html
 const stylus = require('gulp-stylus') // 编译stylus
 const autoprefixer = require('gulp-autoprefixer') // 给css自动添加浏览器版本前缀，// v4.0，在根目录添加一个.browserslistrc文件进行gulp-autoprefixer配置
+const babel = require('gulp-babel') // es6
+const uglify = require('gulp-uglify') //js压缩
 const base64 = require('gulp-base64') // css图片进行base64转码
 const cache = require('gulp-cache') // 图片压缩可能会占用较长时间，gulp-cache可以减少重复压缩
 const tinypngPlus = require('gulp-tinypng-nokey-plus') //压缩图片
@@ -55,6 +57,16 @@ const funcStylus = () => {
 
 }
 
+const funcJs = () => {
+
+    return src('js/*.js')
+        .pipe(babel({ presets: ['@babel/env'], }))
+        .pipe(uglify())
+        .pipe(dest('../js'))
+        .pipe(reload({ stream: true, }))
+
+}
+
 const funcImg = () => {
 
     console.log('---------- 开始压缩图片 ----------')
@@ -75,6 +87,14 @@ const funcImg = () => {
 
 }
 
+const copyAssets = () => {
+
+    return src('assets/**')
+        .pipe(dest('../assets'))
+        .pipe(reload({ stream: true, }))
+        
+}
+
 const funcBrowserSync = () => {
 
     // 初始化Browsersync服务器
@@ -88,10 +108,18 @@ const funcBrowserSync = () => {
         events: 'all',
         ignoreInitial: false,
     }, funcStylus)
+    watch('js/**', {
+        event: 'all',
+        ignoreInitial: false,
+    }, funcJs)
     watch('img/**', {
         events: 'all',
         ignoreInitial: false,
     }, funcImg)
+    watch('assets/**', {
+        events: 'all',
+        ignoreInitial: false,
+    }, copyAssets)
 
 }
 
