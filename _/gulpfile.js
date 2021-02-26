@@ -12,10 +12,10 @@ const {
     watch,
     src,
     dest,
+
 } = require('gulp')
 const path = require('path')
 const pug = require('gulp-pug') // 编译pug
-const prettify = require('gulp-prettify') // 美化html
 const stylus = require('gulp-stylus') // 编译stylus
 const autoprefixer = require('gulp-autoprefixer') // 给css自动添加浏览器版本前缀，// v4.0，在根目录添加一个.browserslistrc文件进行gulp-autoprefixer配置
 const babel = require('gulp-babel') // es6
@@ -35,18 +35,21 @@ const { reload, } = browserSync // 会通知所有的浏览器相关文件被改
 
 const funcPug = () => {
 
-    return src('pug/*.pug') // pug/*.pug pug 目录下所有的.pug文件; pug/**/*.pug pug 目录下所有的.pug文件,含各种文件夹中的.pug文件; pug/**/!(_*.pug) pug 目录下所有的.pug文件,不含各种公共(_*)文件夹中的.pug文件
+    console.log('11111111111')
+
+    return src(['pug/**/*.pug', '!pug/_*/**']) // pug/*.pug pug 目录下所有的.pug文件; pug/**/*.pug pug 目录下所有的.pug文件,含各种文件夹中的.pug文件; pug/**/!(_*.pug) pug 目录下所有的.pug文件,不含各种公共(_*)文件夹中的.pug文件
         .pipe(pug({
             pretty: true,
             self: true, // 是否使用一个叫做 self 的命名空间来存放局部变量
         }))
-        .pipe(prettify({ indent_size: 4, }))
         .pipe(dest('../'))
         .pipe(reload({ stream: true, }))
 
 }
 
 const funcStylus = () => {
+
+    console.log('222222222')
 
     return src('stylus/*.styl')
         .pipe(stylus({ compress: true, }))
@@ -59,6 +62,8 @@ const funcStylus = () => {
 
 const funcJs = () => {
 
+    console.log('333333333333')
+
     return src('js/*.js')
         .pipe(babel({ presets: ['@babel/env'], }))
         .pipe(uglify())
@@ -69,12 +74,14 @@ const funcJs = () => {
 
 const funcImg = () => {
 
+    console.log('444444444444')
+
     console.log('---------- 开始压缩图片 ----------')
     return src('img/**')
-    // .pipe(cache(imagemin([imagemin.gifsicle({ interlaced: true, }), imagemin.mozjpeg({
-    //     quality: 75,
-    //     progressive: true,
-    // }), imagemin.optipng({ optimizationLevel: 5, }), imagemin.svgo({ plugins: [{ removeViewBox: true, }, { cleanupIDs: false, }], })])))
+        // .pipe(cache(imagemin([imagemin.gifsicle({ interlaced: true, }), imagemin.mozjpeg({
+        //     quality: 75,
+        //     progressive: true,
+        // }), imagemin.optipng({ optimizationLevel: 5, }), imagemin.svgo({ plugins: [{ removeViewBox: true, }, { cleanupIDs: false, }], })])))
         .pipe(cache(tinypngPlus()))
         .pipe(dest('../img'))
         .pipe(reload({ stream: true, }))
@@ -89,10 +96,12 @@ const funcImg = () => {
 
 const copyAssets = () => {
 
+    console.log('555555555555')
+
     return src('assets/**')
         .pipe(dest('../assets'))
         .pipe(reload({ stream: true, }))
-        
+
 }
 
 const funcBrowserSync = () => {

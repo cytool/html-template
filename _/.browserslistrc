@@ -1,10 +1,5 @@
-[production]
 > 1%
-ie 8
-
-[modern]
-last 1 chrome version
-last 1 firefox version
-
-[ssr]
-node 12
+Chrome > 30
+android > 4.0
+ios > 7
+not dead
