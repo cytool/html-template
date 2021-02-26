@@ -19,13 +19,13 @@ const prettify = require('gulp-prettify') // 美化html
 const stylus = require('gulp-stylus') // 编译stylus
 const autoprefixer = require('gulp-autoprefixer') // 给css自动添加浏览器版本前缀，// v4.0，在根目录添加一个.browserslistrc文件进行gulp-autoprefixer配置
 const babel = require('gulp-babel') // es6
-const uglify = require('gulp-uglify') //js压缩
+const uglify = require('gulp-uglify') // js压缩
 const base64 = require('gulp-base64') // css图片进行base64转码
 const cache = require('gulp-cache') // 图片压缩可能会占用较长时间，gulp-cache可以减少重复压缩
 const tinypngPlus = require('gulp-tinypng-nokey-plus') //压缩图片
 const filterSize = require('gulp-filter-size') //按大小筛选文件
 const size = require('gulp-size') // 获得文件名称+大小
-const debug = require('gulp-debug') //输出当前gulp管道运行对象
+const debug = require('gulp-debug') // 输出当前gulp管道运行对象
 // const imagemin = require('gulp-imagemin') // 图片压缩
 // const pngquant = require('imagemin-pngquant') // 深度压缩png图片的imagemin插件
 const browserSync = require('browser-sync').create() // browserSync模块,创建Browsersync实例
@@ -51,7 +51,7 @@ const funcStylus = () => {
     return src('stylus/*.styl')
         .pipe(stylus({ compress: true, }))
         .pipe(autoprefixer()) // 使可以很潇洒地写代码，不必考虑各浏览器兼容前缀
-        .pipe(base64()) // 进行base64转码,防止本地图片删除
+        .pipe(base64({ maxImageSize: 2 * 1024, })) // 进行base64转码,防止本地图片删除,限制2kb
         .pipe(dest('../css'))
         .pipe(reload({ stream: true, }))
 
