@@ -43,21 +43,21 @@ const porductionPATH = {
     js: '../js',
     assets: '../assets',
 }
-const devPATH = {
-    pug: '../_dev/',
-    stylus: '../_dev/css',
-    img: '../_dev/img',
-    js: '../_dev/js',
-    assets: '../_dev/assets',
-}
-let usePATH = devPATH
+// const devPATH = {
+//     pug: '../_dev/',
+//     stylus: '../_dev/css',
+//     img: '../_dev/img',
+//     js: '../_dev/js',
+//     assets: '../_dev/assets',
+// }
+const usePATH = porductionPATH
 
-const funcPath = cb => {
+// const funcPath = cb => {
 
-    usePATH = porductionPATH
-    cb()
+//     usePATH = porductionPATH
+//     cb()
 
-}
+// }
 
 const funcPug = () => {
 
@@ -131,9 +131,11 @@ const copyAssets = () => {
 }
 
 const funcBrowserSync = cb => {
+
+    console.log(path.resolve('..', './'), 'slllllllllllllllll')
     
     // 初始化Browsersync服务器
-    browserSync.init({ server: { baseDir: path.resolve('..', usePATH.pug), }, })
+    browserSync.init({ server: { baseDir: path.resolve('..', './'), }, })
     // 4.0新版本直接引入watch即可实现任务监听功能,不用安装插件,series也可以配合watch按顺序执行设置的任务函数,注意这里不需要使用return
     watch('pug/**', {
         events: 'all', // 表示除 'ready' 和 'error' 之外的所有事件
@@ -166,5 +168,3 @@ const funcBrowserSync = cb => {
 exports.default = funcBrowserSync
 
 exports.build = exports.default
-
-exports.dist = series(funcPath, funcImg, parallel(funcPug))
